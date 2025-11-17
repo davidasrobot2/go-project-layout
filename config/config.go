@@ -12,10 +12,11 @@ var Providers = wire.NewSet(NewConfig)
 
 // Config holds all configuration for the application.
 type Config struct {
-	App      AppConfig      `mapstructure:"app"`
-	Database DatabaseConfig `mapstructure:"database"`
-	Redis    RedisConfig    `mapstructure:"redis"`
-	JWT      JWTConfig      `mapstructure:"jwt"`
+	App       AppConfig      `mapstructure:"app"`
+	Database  DatabaseConfig `mapstructure:"database"`
+	Redis     RedisConfig    `mapstructure:"redis"`
+	JWT       JWTConfig      `mapstructure:"jwt"`
+	Signature Signature      `mapstructure:"signature"`
 }
 
 type Signature struct {
@@ -34,7 +35,7 @@ type DatabaseConfig struct {
 	Host     string `mapstructure:"host"`
 	Port     string `mapstructure:"port"`
 	User     string `mapstructure:"user"`
-	Password string `mapstructure:"passowrd"` // Note: "passowrd" matches the typo in your config.yaml
+	Password string `mapstructure:"password"`
 	Name     string `mapstructure:"name"`
 }
 
