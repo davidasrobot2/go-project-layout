@@ -7,10 +7,8 @@ This document provides an overview of the project structure, files, and configur
 The project is organized to separate concerns, making it easier to navigate and maintain.
 
 ```
-.
-└── config/
-    ├── config.go
-    └── config.yaml
+On progress    
+
 ```
 
 ### `/config`
