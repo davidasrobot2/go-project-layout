@@ -1,0 +1,22 @@
+app:
+  host: "http://localhost"
+  port: "8000"
+  version: "1.0.0"
+
+database:
+  host: "127.0.0.1"
+  port: "5432"
+  user: "root"
+  passowrd: "root"
+  name: "app"
+
+redis:
+  host: "127.0.0.1"
+  port: "6379"
+  password: ""
+
+jwt:
+  secret: "appsecret123"
+
+signature:
+  secret: "appsecret123!#"
