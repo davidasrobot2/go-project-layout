@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-A production-ready, feature-rich boilerplate for building robust and scalable backend services in Go. This project is built upon a foundation of modern best practices, including Clean Architecture, Dependency Injection, and a carefully selected set of high-quality libraries.
+this is a SIMPLE, yet a production-ready, feature-rich boilerplate for building robust and scalable backend services in Go. This project is built upon a foundation of modern best practices, including Clean Architecture, Dependency Injection, and a carefully selected set of high-quality libraries.
 
 ## Features
 
@@ -146,7 +146,7 @@ Here are some of the key API endpoints available in the boilerplate:
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please **feel free to submit a Pull Request.**
 
 ## License
 
