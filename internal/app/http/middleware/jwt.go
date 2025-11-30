@@ -1,12 +1,13 @@
 package middleware
 
 import (
-	"davidasrobot/project-layout/config"
-	"davidasrobot/project-layout/pkg/constant"
-	"davidasrobot/project-layout/pkg/response"
+	"davidasrobot2/go-boilerplate/config"
+	"davidasrobot2/go-boilerplate/pkg/constant"
+	"davidasrobot2/go-boilerplate/pkg/response"
 
 	jwtware "github.com/gofiber/contrib/jwt"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 // Protected returns a JWT middleware that protects routes.
@@ -16,12 +17,14 @@ func Protected(cfg *config.Config) fiber.Handler {
 			Key: []byte(cfg.JWT.Secret),
 		},
 		ErrorHandler: jwtError,
+		SuccessHandler: func(c *fiber.Ctx) error {
+			// set user id from "sub" in jwt token
+			c.Locals("user_id", c.Locals("user").(*jwt.Token).Claims.(jwt.MapClaims)["sub"])
+			return c.Next()
+		},
 	})
 }
 
 func jwtError(c *fiber.Ctx, err error) error {
-	if err.Error() == "Missing or malformed JWT" {
-		return response.Error(c, fiber.StatusBadRequest, constant.ErrMissingCredential)
-	}
-	return response.Error(c, fiber.StatusUnauthorized, constant.ErrInvalidExpiredToken)
+	return response.HandleErrors(c, constant.ErrorMessageInvalidToken)
 }

@@ -1,58 +1,71 @@
 package response
 
 import (
-	"davidasrobot/project-layout/pkg/constant"
+	"davidasrobot2/go-boilerplate/pkg/constant"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
-type ResponseStruct struct {
-	ResponseCode    string      `json:"responseCode"`
-	ResponseMessage string      `json:"responseMessage"`
-	ResponseData    interface{} `json:"responseData"`
+type ResponseTemplate struct {
+	Code    int
+	Message string
 }
 
-// NewSuccessResponse creates a new success response.
-func NewSuccessResponse(code string, message string, data interface{}) ResponseStruct {
-	return ResponseStruct{
-		ResponseCode:    code,
-		ResponseMessage: message,
-		ResponseData:    data,
+var (
+	ResponseInternalServerError  = ResponseTemplate{500, "Internal Server Error"}
+	ResponseServiceUnavailable   = ResponseTemplate{503, "Service Unavailable"}
+	ResponseGatewayTimeout       = ResponseTemplate{504, "Gateway Timeout"}
+	ResponseBadRequest           = ResponseTemplate{400, "Bad Request"}
+	ResponseNotFound             = ResponseTemplate{404, "Not Found"}
+	ResponseUnauthorized         = ResponseTemplate{401, "Unauthorized"}
+	ResponseForbidden            = ResponseTemplate{403, "Forbidden"}
+	ResponseTooManyRequests      = ResponseTemplate{429, "Too Many Requests"}
+	ResponseMethodNotAllowed     = ResponseTemplate{405, "Method Not Allowed"}
+	ResponsePayloadTooLarge      = ResponseTemplate{413, "Payload Too Large"}
+	ResponseUnsupportedMediaType = ResponseTemplate{415, "Unsupported Media Type"}
+	ResponseInvalidRequestBody   = ResponseTemplate{422, "Invalid Request Body"}
+	ResponseSuccess              = ResponseTemplate{200, "Success"}
+	ResponseCreated              = ResponseTemplate{201, "Created"}
+	ResponseConflict             = ResponseTemplate{409, "Conflict"}
+)
+
+func BuildResponse(template ResponseTemplate, data ...interface{}) fiber.Map {
+	resp := fiber.Map{
+		"responseCode":    template.Code,
+		"responseMessage": template.Message,
 	}
-}
-
-// NewErrorResponse creates a new error response.
-func NewErrorResponse(code string, message string, data ...interface{}) ResponseStruct {
-	return ResponseStruct{
-		ResponseCode:    code,
-		ResponseMessage: message,
-		ResponseData:    nil, // Error responses typically don't have data
+	if len(data) > 0 && data[0] != nil {
+		resp["responseData"] = data[0]
 	}
+	return resp
 }
 
-func Success(c *fiber.Ctx, data interface{}) error {
-	response := NewSuccessResponse(constant.SuccessCodeOK, "Success", data)
-	return c.Status(fiber.StatusOK).JSON(response)
+func FormatValidationErrors(c *fiber.Ctx, errs validator.FieldError) error {
+	translateError := errs.Field() + " " + errs.Tag()
+	return c.Status(fiber.StatusBadRequest).JSON(BuildResponse(ResponseBadRequest, translateError))
 }
 
-func Error(c *fiber.Ctx, errCode int, errMessage interface{}) error {
-	response := ErrorClassifier(errCode, errMessage.(string))
-	return c.Status(errCode).JSON(response)
-}
+func HandleErrors(c *fiber.Ctx, err error) error {
+	switch err {
+	case constant.ErrorMessageBadRequest:
+		return c.Status(fiber.StatusBadRequest).JSON(BuildResponse(ResponseBadRequest))
+	case constant.ErrorMessageUserAlreadyHasMerchant:
+		return c.Status(fiber.StatusBadRequest).JSON(BuildResponse(ResponseTemplate{Code: 400, Message: err.Error()}))
+	case constant.ErrorMessageNotFound:
+		return c.Status(fiber.StatusNotFound).JSON(BuildResponse(ResponseNotFound))
 
-func ErrorClassifier(errCode int, errMessage string) ResponseStruct {
-	switch errCode {
-	case fiber.ErrBadRequest.Code:
-		return NewErrorResponse(constant.ErrCodeBadRequest, constant.ErrMessageBadRequest)
-	case fiber.ErrUnauthorized.Code:
-		return NewErrorResponse(constant.ErrCodeUnauthorized, constant.ErrMessageUnauthorized)
-	case fiber.ErrForbidden.Code:
-		return NewErrorResponse(constant.ErrCodeForbidden, constant.ErrMessageForbidden)
-	case fiber.ErrNotFound.Code:
-		return NewErrorResponse(constant.ErrCodeNotFound, constant.ErrMessageNotFound)
-	case 0:
-		return NewErrorResponse(constant.ErrCodeNotFound, constant.ErrMessageInvalidRequestBody, errMessage)
+	// Error messages for authentication operations
+	case constant.ErrorMessageInvalidToken,
+		constant.ErrorMessageMissingOrMalformedJWT,
+		constant.ErrorMessageTokenExpired,
+		constant.ErrorMessageInvalidCredential:
+		return c.Status(fiber.StatusUnauthorized).JSON(BuildResponse(ResponseUnauthorized, err.Error()))
 	default:
-		return NewErrorResponse(constant.ErrCodeInternal, constant.ErrMessageInternalServerError)
+		return c.Status(fiber.StatusInternalServerError).JSON(BuildResponse(ResponseInternalServerError, err.Error()))
 	}
+}
+
+func HandleSuccess(c *fiber.Ctx, data interface{}) error {
+	return c.Status(fiber.StatusOK).JSON(BuildResponse(ResponseSuccess, data))
 }

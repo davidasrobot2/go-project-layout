@@ -1,7 +1,8 @@
 package auth
 
 import (
-	"davidasrobot/project-layout/config"
+	"davidasrobot2/go-boilerplate/config"
+	"davidasrobot2/go-boilerplate/internal/domain"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -22,7 +23,8 @@ func NewJWTGenerator(cfg *config.Config) *JWTGenerator {
 }
 
 // GenerateToken creates a new JWT for a given user ID.
-func (j *JWTGenerator) GenerateToken(userID uint) (string, error) {
+func (j *JWTGenerator) GenerateToken(userID string) (*domain.AuthToken, error) {
+	var AuthToken domain.AuthToken
 	claims := jwt.MapClaims{
 		"sub": userID,
 		"exp": time.Now().Add(time.Hour * 72).Unix(),
@@ -30,5 +32,7 @@ func (j *JWTGenerator) GenerateToken(userID uint) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(j.cfg.Secret))
+	AuthToken.Token, _ = token.SignedString([]byte(j.cfg.Secret))
+
+	return &AuthToken, nil
 }

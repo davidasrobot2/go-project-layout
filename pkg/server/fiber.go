@@ -1,7 +1,7 @@
 package server
 
 import (
-	"davidasrobot/project-layout/internal/app/http/middleware"
+	"davidasrobot2/go-boilerplate/internal/app/http/middleware"
 	"log/slog"
 
 	"github.com/gofiber/fiber/v2"

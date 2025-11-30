@@ -1,10 +1,10 @@
 package orm
 
 import (
-	"davidasrobot/project-layout/config"
+	"davidasrobot2/go-boilerplate/config"
 
 	"github.com/google/wire"
-	"gorm.io/driver/postgres"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -13,7 +13,7 @@ var Providers = wire.NewSet(NewGormDB)
 
 // NewGormDB creates a new GORM database instance for PostgreSQL.
 func NewGormDB(cfg *config.Config) (*gorm.DB, error) {
-	db, err := gorm.Open(postgres.Open(cfg.Database.DSN()), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(cfg.Database.DSN()), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}

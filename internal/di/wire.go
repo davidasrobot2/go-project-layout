@@ -4,16 +4,16 @@
 package di
 
 import (
-	"davidasrobot/project-layout/config"
-	"davidasrobot/project-layout/internal/app/http/handler"
-	"davidasrobot/project-layout/internal/app/http/router"
-	"davidasrobot/project-layout/internal/repository"
-	"davidasrobot/project-layout/internal/usecase"
-	"davidasrobot/project-layout/pkg/auth"
-	"davidasrobot/project-layout/pkg/logger"
-	"davidasrobot/project-layout/pkg/orm"
-	"davidasrobot/project-layout/pkg/server"
-	"davidasrobot/project-layout/pkg/validator"
+	"davidasrobot2/go-boilerplate/config"
+	"davidasrobot2/go-boilerplate/internal/app/http/handler"
+	"davidasrobot2/go-boilerplate/internal/app/http/router"
+	"davidasrobot2/go-boilerplate/internal/repository"
+	"davidasrobot2/go-boilerplate/internal/usecase"
+	"davidasrobot2/go-boilerplate/pkg/auth"
+	"davidasrobot2/go-boilerplate/pkg/database/orm"
+	"davidasrobot2/go-boilerplate/pkg/logger"
+	"davidasrobot2/go-boilerplate/pkg/server"
+	"davidasrobot2/go-boilerplate/pkg/validator"
 	"log/slog"
 
 	"github.com/gofiber/fiber/v2"

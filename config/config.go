@@ -41,8 +41,8 @@ type DatabaseConfig struct {
 
 // DSN returns the Data Source Name for connecting to the database.
 func (d DatabaseConfig) DSN() string {
-	return fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
-		d.Host, d.User, d.Password, d.Name, d.Port)
+	return fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
+		d.User, d.Password, d.Host, d.Port, d.Name)
 }
 
 // RedisConfig holds redis configuration.
@@ -59,7 +59,7 @@ type JWTConfig struct {
 
 // NewConfig creates a new Config instance.
 func NewConfig() (*Config, error) {
-	viper.SetConfigFile("config.yaml")
+	viper.SetConfigFile("./config/config.yaml")
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {

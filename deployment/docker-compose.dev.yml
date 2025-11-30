@@ -1,47 +1,45 @@
 version: '3.8'
 
 services:
-  backend:
-    build:
-      context: ../
-      dockerfile: deployment/Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      - mysql
-      - redis
-      - minio
+  # backend:
+  #   build:
+  #     context: ../
+  #     dockerfile: deployment/Dockerfile
+  #   ports:
+  #     - "8080:8080"
+  #   depends_on:
+  #     - mysql
+  #     - redis
+  #     - minio
 
   mysql:
-    image: mysql:8.0
+    image: mysql:8.4
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: exampledb
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: klopdb
     ports:
       - "3306:3306"
     volumes:
       - mysql_data:/var/lib/mysql
 
-  redis:
-    image: redis:6.2
-    ports:
-      - "6379:6379"
-    volumes:
-      - redis_data:/data
+  # redis:
+  #   image: redis:6.2
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
 
-  minio:
-    image: minio/minio
-    ports:
-      - "9000:9000"
-      - "9001:9001" # MinIO Console port
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-    command: server /data --console-address ":9001"
-    volumes:
-      - minio_data:/data
+  # minio:
+  #   image: minio/minio
+  #   ports:
+  #     - "9000:9000"
+  #     - "9001:9001" # MinIO Console port
+  #   environment:
+  #     MINIO_ROOT_USER: minioadmin
+  #     MINIO_ROOT_PASSWORD: minioadmin
+  #   command: server /data --console-address ":9001"
+  #   volumes:
+  #     - minio_data:/data
 
 volumes:
   mysql_data:

@@ -1,12 +1,11 @@
 package router
 
 import (
-	"davidasrobot/project-layout/config"
-	"davidasrobot/project-layout/internal/app/http/handler"
-	"davidasrobot/project-layout/internal/app/http/middleware"
+	"davidasrobot2/go-boilerplate/config"
+	"davidasrobot2/go-boilerplate/internal/app/http/handler"
+	"davidasrobot2/go-boilerplate/internal/app/http/middleware"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/wire"
 )
 
@@ -22,8 +21,17 @@ type Router struct {
 }
 
 // NewRouter creates a new Router.
-func NewRouter(cfg *config.Config, app *fiber.App, userHandler *handler.UserHandler, adminHandler *handler.AdminHandler) *Router {
-	return &Router{Cfg: cfg, App: app, UserHandler: userHandler, AdminHandler: adminHandler}
+func NewRouter(
+	cfg *config.Config,
+	app *fiber.App,
+	userHandler *handler.UserHandler,
+	adminHandler *handler.AdminHandler) *Router {
+	return &Router{
+		Cfg:          cfg,
+		App:          app,
+		UserHandler:  userHandler,
+		AdminHandler: adminHandler,
+	}
 }
 
 // RegisterRoutes registers all application routes.
@@ -31,17 +39,19 @@ func (r *Router) RegisterRoutes() {
 	// Group routes under /api
 	api := r.App.Group("/api")
 
-	// Authentication routes
-	api.Post("/users", r.UserHandler.Create)
-	api.Post("/login", r.UserHandler.Login)
+	v1 := api.Group("/v1")
 
-	// Protected route example
-	api.Get("/me", middleware.Protected(r.Cfg), func(c *fiber.Ctx) error {
-		user := c.Locals("user").(*jwt.Token)
-		claims := user.Claims.(jwt.MapClaims)
-		return c.JSON(fiber.Map{"message": "Welcome!", "user_id": claims["sub"]})
-	})
+	dashboard := v1.Group("/dashboard")
+
+	dashboard.Post("/signin", r.AdminHandler.SignIn)
+
+	dashboardUsers := dashboard.Group("/users").Use(middleware.Protected(r.Cfg))
+	dashboardUsers.Get("/", r.UserHandler.GetAll)
+	dashboardUsers.Post("/", r.UserHandler.Create)
+	dashboardUsers.Get("/:id", r.UserHandler.FindByID)
+	dashboardUsers.Post("/delete/:id", r.UserHandler.Delete)
+	dashboardUsers.Post("/update/:id", r.UserHandler.Update)
 
 	// Admin routes
-	api.Post("/admin", r.AdminHandler.Create)
+	// api.Post("/admin", r.AdminHandler.Create)
 }
