@@ -20,7 +20,7 @@ type Config struct {
 }
 
 type Signature struct {
-	Secret string `mapstructure:"secret"`
+	Secret string `mapstructure:"signature.secret"`
 }
 
 // AppConfig holds application-specific configuration.
@@ -54,7 +54,7 @@ type RedisConfig struct {
 
 // JWTConfig holds JWT configuration.
 type JWTConfig struct {
-	Secret string `mapstructure:"secret"`
+	Secret string `mapstructure:"jwt.secret"`
 }
 
 // NewConfig creates a new Config instance.

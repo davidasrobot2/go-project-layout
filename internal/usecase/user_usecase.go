@@ -33,12 +33,11 @@ func (uc *userUsecase) Create(ctx context.Context, req domain.UserCreateForm) (*
 	}
 
 	user := domain.User{
-		Name:         req.Name,
-		IDCardNumber: req.IDCardNumber,
-		Email:        req.Email,
-		Password:     hashedPassword,
-		Phone:        req.Phone,
-		Address:      req.Address,
+		Name:     req.Name,
+		Email:    req.Email,
+		Password: hashedPassword,
+		Phone:    req.Phone,
+		Address:  req.Address,
 	}
 
 	if err := uc.userRepo.Create(ctx, &user); err != nil {
@@ -80,7 +79,6 @@ func (uc *userUsecase) Update(ctx context.Context, userreq domain.UserUpdateForm
 	}
 
 	user.Name = userreq.Name
-	user.IDCardNumber = userreq.IDCardNumber
 	user.Email = userreq.Email
 	user.Phone = userreq.Phone
 	user.Address = userreq.Address

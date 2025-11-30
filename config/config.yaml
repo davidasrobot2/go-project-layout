@@ -7,14 +7,8 @@ database:
   host: "127.0.0.1"
   port: "3306"
   user: "root"
-  password: "rootpassword"
-  name: "klopdb"
-# database:
-#   host: "172.168.10.40"
-#   port: "3306"
-#   user: "admin"
-#   password: "db3306_TSM@2024"
-#   name: "klopdb"
+  password: "root"
+  name: "defaultdb"
 
 redis:
   host: "127.0.0.1"
@@ -22,7 +16,7 @@ redis:
   password: ""
 
 jwt:
-  secret: "appsecret123"
+  secret: "jwtsecret123"
 
 signature:
-  secret: "appsecret123!#"
+  secret: "signatureSecret!#"

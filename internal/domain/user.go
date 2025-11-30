@@ -7,30 +7,27 @@ import (
 // User represents a user in the system.
 type User struct {
 	BaseDomain
-	Name         string `gorm:"type:varchar(100)" json:"name"`
-	IDCardNumber string `gorm:"type:varchar(20)" json:"id_card_number"`
-	Email        string `gorm:"type:varchar(100);uniqueIndex" json:"email"`
-	Phone        string `gorm:"type:varchar(20)" json:"phone"`
-	Address      string `gorm:"type:text" json:"address"`
-	Password     string `gorm:"type:varchar(255)" json:"-"` // Omit password from JSON responses
-	Status       bool   `gorm:"type:boolean;default:false" json:"status"`
+	Name     string `gorm:"type:varchar(100)" json:"name"`
+	Email    string `gorm:"type:varchar(100);uniqueIndex" json:"email"`
+	Phone    string `gorm:"type:varchar(20)" json:"phone"`
+	Address  string `gorm:"type:text" json:"address"`
+	Password string `gorm:"type:varchar(255)" json:"-"` // Omit password from JSON responses
+	Status   bool   `gorm:"type:boolean;default:false" json:"status"`
 }
 
 type UserCreateForm struct {
-	Name         string `json:"name" validate:"required"`
-	IDCardNumber string `json:"id_card_number" validate:"required,len=16"`
-	Email        string `json:"email" validate:"required,email"`
-	Password     string `json:"password" validate:"required,min=8"`
-	Phone        string `json:"phone" validate:"required,e164,min=13,max=15"`
-	Address      string `json:"address" validate:"required"`
+	Name     string `json:"name" validate:"required"`
+	Email    string `json:"email" validate:"required,email"`
+	Password string `json:"password" validate:"required,min=8"`
+	Phone    string `json:"phone" validate:"required,e164,min=13,max=15"`
+	Address  string `json:"address" validate:"required"`
 }
 
 type UserUpdateForm struct {
-	Name         string `json:"name" validate:"required"`
-	IDCardNumber string `json:"id_card_number" validate:"required,len=16"`
-	Email        string `json:"email" validate:"required,email"`
-	Phone        string `json:"phone" validate:"required,e164,min=13,max=15"`
-	Address      string `json:"address" validate:"required"`
+	Name    string `json:"name" validate:"required"`
+	Email   string `json:"email" validate:"required,email"`
+	Phone   string `json:"phone" validate:"required,e164,min=13,max=15"`
+	Address string `json:"address" validate:"required"`
 }
 
 type UpdatePasswordForm struct {

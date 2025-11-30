@@ -16,7 +16,7 @@ services:
     image: mysql:8.4
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: klopdb
+      MYSQL_DATABASE: defaultdb
     ports:
       - "3306:3306"
     volumes:
